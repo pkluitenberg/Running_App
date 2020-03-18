@@ -22,3 +22,4 @@ req <- GET(url = "https://www.strava.com/api/v3/athlete/activities",config = tok
 print(req)
 
 data = fromJSON(content(req, as = "text"), flatten = TRUE)
+dt = setDT(data)[type=="Run"]
