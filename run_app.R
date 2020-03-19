@@ -12,7 +12,7 @@ library('jsonlite')
 library('data.table')
 # End import packages
 
-# read in config file to get log in info to API
+# read in config file to get static log in info to API
 CONFIG          = read_yaml("~/repos/run_app/config/config.yml")
 CLIENT_ID       = cfg$client_id
 CLIENT_SECRET   = cfg$secret
@@ -33,15 +33,31 @@ token <- oauth2.0_token(endpoint, app,
             as_header = FALSE,
             scope = "activity:read_all")
 
-# make request to strava API
-request <- GET(url = "https://www.strava.com/api/v3/athlete/activities",
-            config = token,
-            query = list(per_page = 200, page = 1))
+# loop through to request data in chunks of 100 activities
+# I don't have enough activities to actually be concerned about the amount
+# i'm pulling but who cares \_(*_*)_/
+# I like to think that I will have more than 32 activities one day
+done <- FALSE
+data_lst <- list()
+i <- 1
+dt = data.table()
+page_len = 100
 
-data = fromJSON(content(req, as = "text"), flatten = TRUE)
-dt = setDT(data)[type=="Run"]
-str(dt)
-dt2 = dt
-
-dt2[,start_lat:=start_latlng[[1]][1]]
-dt
+while (!done){
+    # make request to strava API
+    request <- GET(
+        url = "https://www.strava.com/api/v3/athlete/activities",
+        config = token,
+        query = list(per_page = 100, page = page_len)
+    )
+    # append it to the data.table    
+    dt <- rbindlist(list(dt,
+        fromJSON(content(request, as = "text"),flatten = TRUE)),
+        use.names = TRUE
+    )
+    if (length(content(request)) < page_len){
+        done <- TRUE
+    } else {
+        i <- i + 1
+    }  
+}
