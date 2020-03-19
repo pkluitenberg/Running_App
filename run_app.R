@@ -55,6 +55,7 @@ while (!done){
         fromJSON(content(request, as = "text"),flatten = TRUE)),
         use.names = TRUE
     )
+    # stop requesting once we can't fill any more pages
     if (length(content(request)) < page_len){
         done <- TRUE
     } else {
