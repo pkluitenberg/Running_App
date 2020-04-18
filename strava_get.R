@@ -12,6 +12,7 @@ library("jsonlite")
 library("data.table")
 library("leaflet")
 library("googlePolylines")
+library("R.utils")
 # End import packages
 
 # bind location variables
@@ -74,7 +75,10 @@ while (!done){
 # let's get this data written on out to JSON file (need less structure than CSV)
 # this way we don't need to call the API that often at the moment
 # I only run once a day so no need for frequent calls
-write_json(DT, path = paste0(DATA_DIR,"run_data.json"), pretty == TRUE)
+write_json(DT, path = paste0(DATA_DIR,"run_data.json"), pretty = TRUE)
+
+# read in data
+DT = setDT(read_json(paste0(DATA_DIR,"run_data.json"), simplifyVector = TRUE))
 
 # let's print the names of our data.table to see what is available
 names(DT)
