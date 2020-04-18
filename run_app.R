@@ -7,15 +7,21 @@
 
 # Begin import packages
 library("yaml")
-library('httr')
-library('jsonlite')
-library('data.table')
+library("httr")
+library("jsonlite")
+library("data.table")
 library("leaflet")
 library("googlePolylines")
 # End import packages
 
+# bind location variables
+PARENT_DIR  = "~/repos/run_app/"
+CONFIG_DIR  = paste0(PARENT_DIR,"config/")
+DATA_DIR    = paste0(PARENT_DIR,"data/")
+SOURCE_DIR  = paste0(PARENT_DIR,"source/")
+
 # read in config file to get static log in info to API
-CONFIG          = read_yaml("~/repos/run_app/config/config.yml")
+CONFIG          = read_yaml(paste0(CONFIG_DIR,"config.yml"))
 CLIENT_ID       = CONFIG$client_id
 CLIENT_SECRET   = CONFIG$secret
 
@@ -42,7 +48,7 @@ token <- oauth2.0_token(endpoint, app,
 done <- FALSE
 data_lst <- list()
 i <- 1
-dt = data.table()
+DT = data.table()
 page_len = 100
 
 while (!done){
@@ -53,7 +59,7 @@ while (!done){
         query = list(per_page = page_len, page = i)
     )
     # append it to the data.table    
-    dt <- rbindlist(list(dt,
+    DT <- rbindlist(list(DT,
         fromJSON(content(request, as = "text"),flatten = TRUE)),
         use.names = TRUE
     )
@@ -64,11 +70,23 @@ while (!done){
         i <- i + 1
     }  
 }
+
+# let's get this data written on out to JSON file (need less structure than CSV)
+# this way we don't need to call the API that often at the moment
+# I only run once a day so no need for frequent calls
+write_json(DT, path = paste0(DATA_DIR,"run_data.json"), pretty == TRUE)
+
 # let's print the names of our data.table to see what is available
-names(dt)
+names(DT)
 
+# let's print the number of rows in our data.table as well
+message(paste0("Number of activities: ",DT[,.N]))
 
+# let's filter down to just the runs. (Running is all that matters in life)
+DT = DT[type == 'Run']
 
+# For posterity, let's check the number of rows again to see how many runs I have
+message(paste0("Number of runs: ",DT[,.N]))
 
 
 
