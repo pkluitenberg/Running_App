@@ -1,8 +1,8 @@
 ###################################################################################
-# Title: run_app.R                                                                #
+# Title: strava_get.R                                                                #
 # Purpose: to make API requests to the Strava API to pull down my personal data   #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-03-18                                                       #  
+# Last Modified: 2020-04-18                                                       #  
 ###################################################################################
 
 # Begin import packages
