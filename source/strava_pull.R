@@ -1,8 +1,8 @@
 ###################################################################################
-# Title: strava_get.R                                                                #
+# Title: strava_get.R                                                             #
 # Purpose: to make API requests to the Strava API to pull down my personal data   #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-18                                                       #  
+# Last Modified: 2020-04-19                                                       #  
 ###################################################################################
 
 # Begin import packages
@@ -10,9 +10,6 @@ library("yaml")
 library("httr")
 library("jsonlite")
 library("data.table")
-library("leaflet")
-library("googlePolylines")
-library("sp")
 # End import packages
 
 # bind location variables
