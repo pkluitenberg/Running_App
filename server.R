@@ -1,32 +1,23 @@
 ###################################################################################
-# Title: app.R                                                                    #
-# Purpose: To build shiny app with running data                                   #
+# Title: server.R                                                                 #
+# Purpose: create server for running shiny app                                    #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-18                                                       #  
+# Last Modified: 2020-04-19                                                       #
 ###################################################################################
 
 
-library(shiny)
-library(leaflet)
-library(rsconnect)
-
-ui <- bootstrapPage(
-  tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
-  leafletOutput("map", width = "100%", height = "100%"),
-  absolutePanel(top = 10, right = 10,
-    dateRangeInput("range", "Date of Run", 
-      start = min(spl_df$start_date_local), 
-      end = max(spl_df$start_date_local),
-    )
-  )
-)
-
+library("shiny")
+library("leaflet")
+library("jsonlite")
+library("data.table")
+library("googlePolylines")
+library("sp")
 
 
 
 
 # read in data
-DT = setDT(read_json(paste0(DATA_DIR,"run_data.json"), simplifyVector = TRUE))
+dt = setDT(read_json(paste0(DATA_DIR,"run_data.json"), simplifyVector = TRUE))
 
 # let's print the names of our data.table to see what is available
 names(DT)
@@ -88,5 +79,3 @@ server <- function(input, output, session) {
   })
 
 }
-
-shinyApp(ui, server)

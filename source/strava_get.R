@@ -12,7 +12,7 @@ library("jsonlite")
 library("data.table")
 library("leaflet")
 library("googlePolylines")
-library("R.utils")
+library("sp")
 # End import packages
 
 # bind location variables
@@ -76,51 +76,3 @@ while (!done){
 # this way we don't need to call the API that often at the moment
 # I only run once a day so no need for frequent calls
 write_json(DT, path = paste0(DATA_DIR,"run_data.json"), pretty = TRUE)
-
-# read in data
-DT = setDT(read_json(paste0(DATA_DIR,"run_data.json"), simplifyVector = TRUE))
-
-# let's print the names of our data.table to see what is available
-names(DT)
-
-# let's print the number of rows in our data.table as well
-message(paste0("Number of activities: ",DT[,.N]))
-
-# let's filter down to just the runs. (Running is all that matters in life)
-DT = DT[type == 'Run']
-
-# For posterity, let's check the number of rows again to see how many runs I have
-message(paste0("Number of runs: ",DT[,.N]))
-
-
-
-
-# testing testing 1 2 3 
-cities <- read.csv(textConnection("
-City,Lat,Long,Pop
-Boston,42.3601,-71.0589,645966
-Hartford,41.7627,-72.6743,125017
-New York City,40.7127,-74.0059,8406000
-Philadelphia,39.9500,-75.1667,1553000
-Pittsburgh,40.4397,-79.9764,305841
-Providence,41.8236,-71.4222,177994
-"))
-
-leaflet() %>% addTiles()
-
-dt[,map.summary_polyline_decoded:= lapply(dt[,map.summary_polyline],decode)]
-
-head(dt,1)
-
-list(unlist(dt[,end_latlng])[c(TRUE,FALSE)])
-
-cbindlist(dt,list(unlist(dt[,end_latlng])[c(TRUE,FALSE)]))
-
-dt[,!c("V2")]
-
-m <- leaflet() %>%
-  addTiles() %>%
-  addMarkers(lng = -81.677590, lat = 41.892160,
-             popup = "Home")
-
-m
