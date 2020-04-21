@@ -12,7 +12,13 @@ I was in the middle of an R project at work and my friend Ryan ([@ryanpeiffer](h
 Shiny application hosting service). I thought this would be a great opportunity to give those two applications a try.
 
 ### Index
-* Getting Started
-* Overview
-* Functions
-* Relevant Resources
+* [Getting Started](#getting-started)
+* [Overview](#overview)
+* [Open Items](#open-items)
+* [Resources](#resources)
+
+### Getting Started
+### Overview
+### Functions
+### Open Items
+### Resources
