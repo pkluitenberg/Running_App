@@ -50,7 +50,7 @@ install.packages(c("data.table",
                    "rsconnect"))
 ```
 
-### Overview
+### Code Overview
 
 This application consists of five total R scripts.
 1. /source/functions.R
