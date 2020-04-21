@@ -48,6 +48,9 @@ server <- function(input, output, session) {
 
   observe({
     leafletProxy("map", data = filteredData()) %>%
+      clearShapes() %>% 
+      clearPopups() %>% 
+      clearMarkers() %>%
       addPolylines(opacity = 0.4, weight = 3, color = "#ff0000")
   })
 
