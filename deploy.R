@@ -13,8 +13,6 @@ suppressMessages(suppressWarnings(library(yaml)))
 # bind static variables
 PARENT_DIR  = "~/repos/run_app/"
 CONFIG_DIR  = paste0(PARENT_DIR,"config/")
-DATA_DIR    = paste0(PARENT_DIR,"data/")
-SOURCE_DIR  = paste0(PARENT_DIR,"source/")
 
 # read in config file for auth specs
 CONFIG          = read_yaml(paste0(CONFIG_DIR,"shiny.yml"))
