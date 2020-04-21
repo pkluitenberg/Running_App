@@ -13,11 +13,43 @@ Shiny application hosting service). I thought this would be a great opportunity 
 
 ### Index
 - [Getting Started](#getting-started)
-- [Overview](#overview)
+- [Dependencies](#dependencies)
+- [Code Overview](#code-overview) 
 - [Open Items](#open-items)
 - [Resources](#resources)
 
 ### Getting Started
+
+If you're interested in using this to host your own app, there is a little bit of up front work to get yourself access to the Strava API and to set up a ShinyApps.io account. Below is a link to a tutorial on how to get access to the Strava API and a link to ShinyApps.io.
+
+Once you get the above two items set up, you are pretty much good to go. You can clone this repository to your local machine using git clone with either HTTPS or SSH.
+```bash
+$ git clone https://github.com/pkluitenberg/Running_App.git
+```
+Next, you'll need to head into the `/config/` folder and enter your credentials for the Strava API and ShinyApps.io in the two yaml files. Once you've updated the files, you can remove the *example_* prefix from the file names using the following command (you could also just use `mv` twice but this is more fun):
+```bash
+$ for file in example_*; do mv "$file" "${file#example_}"; done;
+```
+This last step will be easy to eliminate but I have yet to. My source scripts both are hardcoded to point to "~/repos/run_app" as the parent directory. If you have your repo sitting somewhere else or named something else, you will need to change those references.
+
+I think after you finish these three steps, you should be up and running.
+
+### Dependencies
+All packages can be installed using the following command in your R terminal
+
+```R
+install.packages(c("data.table",
+                   "httr",
+                   "jsonlite",
+                   "R.utils",
+                   "sp",
+                   "googlePolylines",
+                   "yaml",
+                   "shiny",
+                   "leaflet",
+                   "rsconnect"))
+```
+
 ### Overview
 
 This application consists of five total R scripts.
@@ -45,7 +77,6 @@ This application consists of five total R scripts.
     - Builds the backend of the shiny app - filters data based on user inputs, draws polylines, and renders the map 
 5. deploy.R
     - Deploys the shiny app to ShinyApps.io
-
 
 ### Open Items
 ### Resources
