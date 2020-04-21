@@ -2,7 +2,7 @@
 # Title: ui.R                                                                     #
 # Purpose: create user interface for running shiny app                            #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-19                                                       #
+# Last Modified: 2020-04-20                                                       #
 ###################################################################################
 
 # begin import packages
