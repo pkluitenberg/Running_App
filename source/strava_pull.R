@@ -1,16 +1,16 @@
 ###################################################################################
-# Title: strava_get.R                                                             #
+# Title: strava_pull.R                                                            #
 # Purpose: to make API requests to the Strava API to pull down my personal data   #
 # Author: Paul Kluitenberg                                                        #
 # Last Modified: 2020-04-20                                                       #  
 ###################################################################################
 
 # Begin import packages
-suppressMessages(suppressWarnings(library("yaml")))
-suppressMessages(suppressWarnings(library("httr")))
-suppressMessages(suppressWarnings(library("jsonlite")))
-suppressMessages(suppressWarnings(library("data.table")))
-suppressMessages(suppressWarnings(library("R.utils")))
+suppressMessages(suppressWarnings(library(yaml)))
+suppressMessages(suppressWarnings(library(httr)))
+suppressMessages(suppressWarnings(library(jsonlite)))
+suppressMessages(suppressWarnings(library(data.table)))
+suppressMessages(suppressWarnings(library(R.utils)))
 # End import packages
 
 # bind static variables
@@ -25,7 +25,7 @@ URL         = "https://www.strava.com/api/v3/athlete/activities"
 source(paste0(SOURCE_DIR,"functions.R"))
 
 # read in config file to get static log in info to API
-CONFIG          = read_yaml(paste0(CONFIG_DIR,"config.yml"))
+CONFIG          = read_yaml(paste0(CONFIG_DIR,"strava.yml"))
 CLIENT_ID       = CONFIG$client_id
 CLIENT_SECRET   = CONFIG$secret
 
