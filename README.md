@@ -12,12 +12,40 @@ I was in the middle of an R project at work and my friend Ryan ([@ryanpeiffer](h
 Shiny application hosting service). I thought this would be a great opportunity to give those two applications a try.
 
 ### Index
-* [Getting Started](#getting-started)
-* [Overview](#overview)
-* [Open Items](#open-items)
-* [Resources](#resources)
+- [Getting Started](#getting-started)
+- [Overview](#overview)
+- [Open Items](#open-items)
+- [Resources](#resources)
 
 ### Getting Started
 ### Overview
+
+This application consists of five total R scripts.
+1. /source/functions.R
+
+    - Currently there are two functions in this script.
+    ```R
+    # Pulls data down from URL using provided authenitcation and writes to a data.table
+    api_to_dt = function(url, token, page_len = 100){}
+    ```
+    
+    ```R
+    # reads in data.table with polylines (decoded or encoded) in a column.
+    # converts the polylines into Spatial Objects using the 'sp' package
+    # outputs SpatialLineDataFrame with the original columns in the data.table plus the Spatial Objects
+    poly_to_spatial = function(dt, poly_col, decode_poly = FALSE){}
+    ```
+
+2. /source/strava_pull.R
+    - Walks through the authentication to the Strava API (using oauth2.0) and calls
+    the api_to_dt() function to write down a gzipped JSON file of the strava data
+3. ui.R
+    - Builds the user interface for the Shiny app
+4. server.R
+    - Builds the backend of the shiny app - filters data based on user inputs, draws polylines, and renders the map 
+5. deploy.R
+    - Deploys the shiny app to ShinyApps.io
+
+
 ### Open Items
 ### Resources
