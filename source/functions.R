@@ -47,34 +47,32 @@ api_to_dt = function(url, token, page_len = 100){
 # this function takes data table of poylines and converts it to a Spatial Lines Data Frame
 # using the sp package. This allows for the lines to be nicely mapped using leaflet or another package.
 # input is a data.table. I think it should also work with a data.frame
-poly_to_spatial = function(dt, poly_col, id_col, decode = FALSE){
+poly_to_spatial = function(dt, poly_col, decode_poly = FALSE){
     
     # begin import packages
     suppressMessages(suppressWarnings(library(sp)))
     suppressMessages(suppressWarnings(library(data.table)))
     # end import packages
 
+    # define temporary column name for poyline because data.table is
+    # really terrible with variables as column names
+    setnames(dt,poly_col,"temp_polyline")
+
     # if the user provides an encoded polyline, we'll use googlePolylines to decode it
     # this will return a data.frame in each row of the data.table with each lat & lon 
-    if (decode){
+    if (decode_poly){
         suppressMessages(suppressWarnings(library("googlePolylines")))
-        dt[,poly_col := 
-            lapply(dt[,poly_col],decode)]    
+        dt[, temp_polyline := 
+            lapply(dt[, temp_polyline],decode)] 
     }
-
     # build a list of Spatial Lines    
-    lst_lines <- lapply(unique(dt$id_col), function(x){
+    lst_lines <- lapply(1:dt[,.N], function(x){
         ## make sure longitude is ordered first and the latitude
-        Lines(Line(dt[x == id_col, poly_col[[1]]][, c('lon','lat')]), ID = x)
+        Lines(Line(dt[x, temp_polyline[[1]]][, c('lon','lat')]), ID = x)
     })
 
-    # convert list of lines to SpatialLines object
+    # convert our list of lines to a Spatial Object
     spl_list = SpatialLines(lst_lines)
-
-    # set row names to id_col. we will match this list up to our data.table by this value
-    row.names(dt) = dt$id_col
-    dt$id_col = NULL
-
 
     # attaches our Spatial Lines objects to our data.table
     # matches Spatial Lines objects ID to row names in data.table

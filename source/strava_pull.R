@@ -2,7 +2,7 @@
 # Title: strava_get.R                                                             #
 # Purpose: to make API requests to the Strava API to pull down my personal data   #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-19                                                       #  
+# Last Modified: 2020-04-20                                                       #  
 ###################################################################################
 
 # Begin import packages
@@ -65,6 +65,6 @@ message(paste0("Number of runs: ",dt[,.N]))
 dt = na.omit(dt,cols = c("map.summary_polyline"))
 message(paste0("Number of runs w/ GPS data: ",dt[,.N]))
 
-# write data out to compressed JSON
-write_json(dt, path = DATA_PATH, simplifyVector = TRUE)
-gzip(DATA_PATH, destname = paste0(DATA_PATH,".gz"), remove = TRUE)
+# write data out to compressed JSON because im rocking a 5 yr old chromebook
+write_json(dt, path = DATA_PATH, simplify_vector = TRUE, pretty = TRUE)
+gzip(DATA_PATH, destname = paste0(DATA_PATH,".gz"), overwrite = TRUE, remove = TRUE)
