@@ -19,6 +19,5 @@ Shiny application hosting service). I thought this would be a great opportunity 
 
 ### Getting Started
 ### Overview
-### Functions
 ### Open Items
 ### Resources
