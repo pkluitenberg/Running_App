@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 ###################################################################################
 # Title: strava_pull.R                                                            #
 # Purpose: to make API requests to the Strava API to pull down my personal data   #

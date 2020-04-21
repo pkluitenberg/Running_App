@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 ###################################################################################
 # Title: deploy.R                                                                 #
 # Purpose: this script deploys the shiny app to shinyapps.io                      #
@@ -21,7 +23,7 @@ SECRET          = CONFIG$secret
 ACCT_NAME       = CONFIG$acct_name
 
 # authorize account
-rsconnect::setAccountInfo(name=ACCT_NAME,
+rsconnect::setAccountInfo(name=ACCT_NAME,	
 			  token=TOKEN,
 			  secret=SECRET)
 
