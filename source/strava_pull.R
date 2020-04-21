@@ -6,10 +6,11 @@
 ###################################################################################
 
 # Begin import packages
-suppressWarnings(library("yaml"))
-suppressWarnings(library("httr"))
-suppressWarnings(library("jsonlite"))
-suppressWarnings(library("data.table"))
+suppressMessages(suppressWarnings(library("yaml")))
+suppressMessages(suppressWarnings(library("httr")))
+suppressMessages(suppressWarnings(library("jsonlite")))
+suppressMessages(suppressWarnings(library("data.table")))
+suppressMessages(suppressWarnings(library("R.utils")))
 # End import packages
 
 # bind static variables
@@ -17,7 +18,11 @@ PARENT_DIR  = "~/repos/run_app/"
 CONFIG_DIR  = paste0(PARENT_DIR,"config/")
 DATA_DIR    = paste0(PARENT_DIR,"data/")
 SOURCE_DIR  = paste0(PARENT_DIR,"source/")
+DATA_PATH   = paste0(DATA_DIR,"runs.json")
 URL         = "https://www.strava.com/api/v3/athlete/activities"
+
+# source functions
+source(paste0(SOURCE_DIR,"functions.R"))
 
 # read in config file to get static log in info to API
 CONFIG          = read_yaml(paste0(CONFIG_DIR,"config.yml"))
@@ -54,14 +59,12 @@ message(paste0("Number of activities: ",dt[,.N]))
 
 # let's filter down to just the runs. (Running is all that matters in life)
 dt = dt[type == 'Run']
-
-# For posterity, let's check the number of rows again to see how many runs I have
 message(paste0("Number of runs: ",dt[,.N]))
 
 # Let's also filter out any runs without a polyline because I can't map them
 dt = na.omit(dt,cols = c("map.summary_polyline"))
-
 message(paste0("Number of runs w/ GPS data: ",dt[,.N]))
 
-# write data out to compressed csv
-fwrite(dt, paste0(DATA_DIR,"runs.csv.gz"), sep = "|")
+# write data out to compressed JSON
+write_json(dt, path = DATA_PATH, simplifyVector = TRUE)
+gzip(DATA_PATH, destname = paste0(DATA_PATH,".gz"), remove = TRUE)

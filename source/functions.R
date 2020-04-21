@@ -9,9 +9,9 @@
 api_to_dt = function(url, token, page_len = 100){
 
     # begin import packages
-    suppressWarnings(library(jsonlite))
-    suppressWarnings(library(data.table))
-    suppressWarnings(library(httr))
+    suppressMessages(suppressWarnings(library(jsonlite)))
+    suppressMessages(suppressWarnings(library(data.table)))
+    suppressMessages(suppressWarnings(library(httr)))
     # end import packages
 
     # bind variables
@@ -50,14 +50,14 @@ api_to_dt = function(url, token, page_len = 100){
 poly_to_spatial = function(dt, poly_col, id_col, decode = FALSE){
     
     # begin import packages
-    suppressWarnings(library(sp))
-    suppressWarnings(library(data.table))
+    suppressMessages(suppressWarnings(library(sp)))
+    suppressMessages(suppressWarnings(library(data.table)))
     # end import packages
 
     # if the user provides an encoded polyline, we'll use googlePolylines to decode it
     # this will return a data.frame in each row of the data.table with each lat & lon 
     if (decode){
-        suppressWarnings(library("googlePolylines"))
+        suppressMessages(suppressWarnings(library("googlePolylines")))
         dt[,poly_col := 
             lapply(dt[,poly_col],decode)]    
     }
