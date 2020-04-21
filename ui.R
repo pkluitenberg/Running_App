@@ -14,6 +14,8 @@ suppressMessages(suppressWarnings(library(sp)))
 # end import packages
 
 # bind location variables
+# its important that these are relative paths
+# ShinyApps.io does not work with absolute paths
 DATA_PATH   = paste0("data/runs.json.gz")
 SOURCE_PATH = paste0("source/functions.R")
 
