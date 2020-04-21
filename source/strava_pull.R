@@ -6,17 +6,18 @@
 ###################################################################################
 
 # Begin import packages
-library("yaml")
-library("httr")
-library("jsonlite")
-library("data.table")
+suppressWarnings(library("yaml"))
+suppressWarnings(library("httr"))
+suppressWarnings(library("jsonlite"))
+suppressWarnings(library("data.table"))
 # End import packages
 
-# bind location variables
+# bind static variables
 PARENT_DIR  = "~/repos/run_app/"
 CONFIG_DIR  = paste0(PARENT_DIR,"config/")
 DATA_DIR    = paste0(PARENT_DIR,"data/")
 SOURCE_DIR  = paste0(PARENT_DIR,"source/")
+URL         = "https://www.strava.com/api/v3/athlete/activities"
 
 # read in config file to get static log in info to API
 CONFIG          = read_yaml(paste0(CONFIG_DIR,"config.yml"))
@@ -43,33 +44,24 @@ token <- oauth2.0_token(endpoint, app,
 # I don't have enough activities to actually be concerned about the amount
 # i'm pulling but who cares \_(*_*)_/
 # I like to think that I will have more than 32 activities one day
-done <- FALSE
-data_lst <- list()
-i <- 1
-DT = data.table()
-page_len = 100
+dt = api_to_dt(URL, token)
 
-while (!done){
-    # make request to strava API
-    request <- GET(
-        url = "https://www.strava.com/api/v3/athlete/activities",
-        config = token,
-        query = list(per_page = page_len, page = i)
-    )
-    # append it to the data.table    
-    DT <- rbindlist(list(DT,
-        fromJSON(content(request, as = "text"),flatten = TRUE)),
-        use.names = TRUE
-    )
-    # stop requesting once we can't fill any more pages
-    if (length(content(request)) < page_len){
-        done <- TRUE
-    } else {
-        i <- i + 1
-    }  
-}
+# let's print the names of our data.table to see what is available
+names(dt)
 
-# let's get this data written on out to JSON file (need less structure than CSV)
-# this way we don't need to call the API that often at the moment
-# I only run once a day so no need for frequent calls
-write_json(DT, path = paste0(DATA_DIR,"run_data.json"), pretty = TRUE)
+# let's print the number of rows in our data.table as well
+message(paste0("Number of activities: ",dt[,.N]))
+
+# let's filter down to just the runs. (Running is all that matters in life)
+dt = dt[type == 'Run']
+
+# For posterity, let's check the number of rows again to see how many runs I have
+message(paste0("Number of runs: ",dt[,.N]))
+
+# Let's also filter out any runs without a polyline because I can't map them
+dt = na.omit(dt,cols = c("map.summary_polyline"))
+
+message(paste0("Number of runs w/ GPS data: ",dt[,.N]))
+
+# write data out to compressed csv
+fwrite(dt, paste0(DATA_DIR,"runs.csv.gz"), sep = "|")
