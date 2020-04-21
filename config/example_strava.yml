@@ -1,0 +1,4 @@
+# Personal credentials for the Strava API
+# Don't you dare touch 'em
+client_id: xxxxx
+secret: xxxxxxxxxxxxxxxxxxxxxxxxxxx

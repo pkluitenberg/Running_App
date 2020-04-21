@@ -1,2 +1,3 @@
-**.yml
+config/strava.yml
+config/shiny.yml
 rsconnect/
