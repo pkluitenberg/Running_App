@@ -14,14 +14,11 @@ suppressMessages(suppressWarnings(library(sp)))
 # End import packages
 
 # bind location variables
-PARENT_DIR  = "~/repos/run_app/"
-CONFIG_DIR  = paste0(PARENT_DIR,"config/")
-DATA_DIR    = paste0(PARENT_DIR,"data/")
-SOURCE_DIR  = paste0(PARENT_DIR,"source/")
-DATA_PATH   = paste0(DATA_DIR,"runs.json.gz")
+DATA_PATH = paste0("data/runs.json.gz")
+SOURCE_PATH = paste0("source/functions.R")
 
 # source functions
-source(paste0(SOURCE_DIR,"functions.R"))
+source(SOURCE_PATH)
 
 # read in data
 dt = setDT(fromJSON(DATA_PATH))
