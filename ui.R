@@ -33,7 +33,7 @@ ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
   tags$head(includeCSS("format.css")),
   leafletOutput("map", width = "100%", height = "100%"),
-  absolutePanel(top = 10, left = "auto", right = 10, 
+  absolutePanel(id = "controls", top = 10, left = "auto", right = 10, 
                 bottom = "auto", width = 325, height = "auto", 
                 class = "panel panel-default", draggable = TRUE, 
                 h2("My Run Map"),
