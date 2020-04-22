@@ -43,7 +43,9 @@ server <- function(input, output, session) {
       urlTemplate = "//{s}.tiles.mapbox.com/v3/jcheng.map-5ebohr46/{z}/{x}/{y}.png",
       attribution = 'Maps by <a href="http://www.mapbox.com/">Mapbox</a>'
     ) %>%
-    fitBounds(~min(start_longitude), ~min(start_latitude), ~max(start_longitude), ~max(start_latitude))
+    # pre-set boundaries
+    # could make these dynamic at some point but not important now
+    fitBounds(-87.735277, 41.917473, -87.587440, 41.859110)
   })
 
   observe({
@@ -53,5 +55,4 @@ server <- function(input, output, session) {
       clearMarkers() %>%
       addPolylines(opacity = 0.4, weight = 3, color = "#ff0000")
   })
-
 }
