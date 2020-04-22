@@ -31,8 +31,12 @@ spl_df = poly_to_spatial(dt, poly_col = "map.summary_polyline",
 
 ui <- bootstrapPage(
   tags$style(type = "text/css", "html, body {width:100%;height:100%}"),
+  tags$head(includeCSS("format.css")),
   leafletOutput("map", width = "100%", height = "100%"),
-  absolutePanel(top = 10, right = 10,
+  absolutePanel(top = 10, left = "auto", right = 10, 
+                bottom = "auto", width = 325, height = "auto", 
+                class = "panel panel-default", draggable = TRUE, 
+                h2("My Run Map"),
     dateRangeInput("range", "Date of Run", 
       start = min(spl_df$start_date_local), 
       end = max(spl_df$start_date_local),
