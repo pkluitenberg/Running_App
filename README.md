@@ -83,4 +83,11 @@ This application consists of five total R scripts.
     - Deploys the shiny app to ShinyApps.io
 
 ### Open Items
+- Add a histogram of miles per run
+- Add a conversion between kilometers & miles
+- Add in average pace or graph or rolling average pace
+- Add in popups with basic run info when you click on a route
 ### Resources
+ - Great tutorial on accessing Strava API with R: https://bldavies.com/blog/accessing-strava-api/
+ - ShinyApps.io: https://www.shinyapps.io/
+ - Shiny SuperZip example: https://shiny.rstudio.com/gallery/superzip-example.html
