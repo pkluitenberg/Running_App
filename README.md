@@ -11,6 +11,9 @@ which allowed me to get to my running data without much trouble.
 I was in the middle of an R project at work and my friend Ryan ([@ryanpeiffer](https://github.com/ryanpeiffer)) had previously shown me Shiny and ShinyApps.io (RStudio's
 Shiny application hosting service). I thought this would be a great opportunity to give those two applications a try.
 
+
+**Link to published app:**  https://pkluitenberg.shinyapps.io/run_app/
+
 ### Index
 - [Getting Started](#getting-started)
 - [Dependencies](#dependencies)
