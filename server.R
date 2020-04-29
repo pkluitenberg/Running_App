@@ -11,6 +11,7 @@ suppressMessages(suppressWarnings(library(leaflet)))
 suppressMessages(suppressWarnings(library(jsonlite)))
 suppressMessages(suppressWarnings(library(data.table)))
 suppressMessages(suppressWarnings(library(sp)))
+suppressMessages(suppressWarnings(library(measurements)))
 # End import packages
 
 # bind location variables
@@ -47,6 +48,9 @@ server <- function(input, output, session) {
     # could make these dynamic at some point but not important now
     fitBounds(-87.735277, 41.917473, -87.587440, 41.859110)
   })
+
+  output$miles = renderText({
+    conv_unit(sum(filteredData()$distance),from = "m",to = "mi")})
 
   observe({
     leafletProxy("map", data = filteredData()) %>%

@@ -47,6 +47,7 @@ install.packages(c("data.table",
                    "yaml",
                    "shiny",
                    "leaflet",
+                   "measurements",
                    "rsconnect"))
 ```
 
