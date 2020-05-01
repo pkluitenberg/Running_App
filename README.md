@@ -88,6 +88,9 @@ This application consists of five total R scripts.
 - Add in average pace or graph or rolling average pace
 - Add in popups with basic run info when you click on a route
 - Add in functionality for app to make timed API calls to refresh data
+- Make colors dynamic or at least not have them hardcoded
+- Work on formatting
+- Quit being a memelord and don't use comic sans
 ### Resources
  - Great tutorial on accessing Strava API with R: https://bldavies.com/blog/accessing-strava-api/
  - ShinyApps.io: https://www.shinyapps.io/
