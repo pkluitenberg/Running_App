@@ -36,17 +36,21 @@ ui <- bootstrapPage(
   leafletOutput("map", width = "100%", height = "100%"),
   absolutePanel(id = "controls", top = 10, left = "auto", right = 10, 
                 bottom = "auto", width = 325, height = "auto", 
-                class = "panel panel-default", draggable = TRUE, 
-    h1("My Run Map"),
+                class = "panel panel-default", draggable = TRUE,
+    fluidRow(
+      column(8,h2("My Run Map")),
+      column(4, align = "right", 
+        switchInput("units", value = TRUE, onLabel = "mi", 
+          offLabel = "km", size = "small", inline = TRUE,
+        )
+      )
+    ),
     dateRangeInput("range", "Date of Run", 
       start = min(spl_df$start_date_local), 
       end = max(spl_df$start_date_local),
     ),
     h2("Total Distance Run"),
     textOutput("distance"),
-    h3("Distance Distribution"),
-    plotOutput("dist_hist", height = 200),
-    switchInput("units", value = TRUE, onLabel = "mi", offLabel = "km")
-
+    plotOutput("dist_hist", height = 200)
   )
 )

@@ -41,7 +41,6 @@ server <- function(input, output, session) {
     subset(spl_df, start_date_local >= input$range[1] &
           start_date_local <= input$range[2])
   })
-
   output$map <- renderLeaflet({
     leaflet(spl_df) %>% 
     addTiles(

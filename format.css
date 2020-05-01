@@ -3,27 +3,35 @@ body, label, input, button, select {
     font-family: 'Helvetica Neue', Helvetica;
     font-weight: 200;
 }
-h1, h2, h3 { font-weight: 400; }
+h1, h2, h3 { 
+    font-weight: 400;
+    padding: 0; 
+    margin: 0;
+}
   
 #controls {
     /* Appearance */
     background-color: white;
-    padding: 0px 20px 20px 20px;
+    padding: 20px 20px 20px 20px;
     cursor: move;
     /* Fade out while not hovering */
     opacity: 0.65;
     zoom: 0.9;
     transition: opacity 500ms 1s;
-    font-family: "Comic Sans MS", "Comic Sans", cursive;
 }
 #controls:hover {
     /* Fade in while hovering */
     opacity: 0.95;
     transition-delay: 0;
 }
-#miles {
+#distance {
     font-size: 32px;
     text-align: center;
-    border-style: dashed;
-    background-color: #e3e3e1;
+    border-style: solid;
+    background-color: #69b3a2;
 }
+
+#dist_hist {
+    padding: 20px 0px 0px 0px;
+}
+
