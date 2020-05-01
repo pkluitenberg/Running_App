@@ -90,7 +90,7 @@ This application consists of five total R scripts.
 - Add in functionality for app to make timed API calls to refresh data
 - Make colors dynamic or at least not have them hardcoded
 - Work on formatting
-- Quit being a memelord and don't use comic sans
+- ~~Quit being a memelord and don't use comic sans~~ **Complete**
 ### Resources
  - Great tutorial on accessing Strava API with R: https://bldavies.com/blog/accessing-strava-api/
  - ShinyApps.io: https://www.shinyapps.io/
