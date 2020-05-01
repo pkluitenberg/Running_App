@@ -36,7 +36,9 @@ spl_df = poly_to_spatial(dt, poly_col = "map.summary_polyline",
 server <- function(input, output, session) {
 
   filteredData <- reactive({
-    subset(spl_df,start_date_local >= input$range[1] &
+    units = ifelse(input$units,"mi","km")
+    spl_df$distance = conv_unit(spl_df$distance,from = "m",to = units)
+    subset(spl_df, start_date_local >= input$range[1] &
           start_date_local <= input$range[2])
   })
 
@@ -51,10 +53,8 @@ server <- function(input, output, session) {
     fitBounds(-87.735277, 41.917473, -87.587440, 41.859110)
   })
 
-  output$miles = renderText({
-    round(conv_unit(
-      sum(filteredData()$distance),from = "m",to = "mi"),
-      digits = 0 )
+  output$distance = renderText({
+    round(sum(filteredData()$distance),digits = 0 )
   })
 
   output$dist_hist <- renderPlot({
@@ -62,12 +62,12 @@ server <- function(input, output, session) {
     if (nrow(filteredData()) == 0)
       return(NULL)
 
-    ggplot(as.data.frame(filteredData()), aes(x=conv_unit(distance,from="m",to="mi"))) +
+    ggplot(as.data.frame(filteredData()), aes(x=distance)) +
       geom_histogram(binwidth = 1, fill = "#69b3a2",color = "white") +
       xlab("Length of Run") +
       ylab("Frequency") +
       theme_classic() +
-      scale_x_continuous(breaks = seq(0,max(round(conv_unit(filteredData()$distance,from = "m", to = "mi"))),1))
+      scale_x_continuous(breaks = seq(0,max(round(filteredData()$distance)),1))
   })
 
   observe({

@@ -11,6 +11,7 @@ suppressMessages(suppressWarnings(library(leaflet)))
 suppressMessages(suppressWarnings(library(jsonlite)))
 suppressMessages(suppressWarnings(library(data.table)))
 suppressMessages(suppressWarnings(library(sp)))
+suppressMessages(suppressWarnings(library(shinyWidgets)))
 # end import packages
 
 # bind location variables
@@ -41,9 +42,11 @@ ui <- bootstrapPage(
       start = min(spl_df$start_date_local), 
       end = max(spl_df$start_date_local),
     ),
-    h2("Total Miles Run"),
-    textOutput("miles"),
+    h2("Total Distance Run"),
+    textOutput("distance"),
     h3("Distance Distribution"),
-    plotOutput("dist_hist", height = 200)
+    plotOutput("dist_hist", height = 200),
+    switchInput("units", value = TRUE, onLabel = "mi", offLabel = "km")
+
   )
 )
