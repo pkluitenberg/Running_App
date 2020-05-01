@@ -84,7 +84,7 @@ This application consists of five total R scripts.
 
 ### Open Items
 - ~~Add a histogram of miles per run~~ **Complete**
-- Add a conversion between kilometers & miles
+- ~~Add a conversion between kilometers & miles~~ **Complete**
 - Add in average pace or graph or rolling average pace
 - Add in popups with basic run info when you click on a route
 - Add in functionality for app to make timed API calls to refresh data
