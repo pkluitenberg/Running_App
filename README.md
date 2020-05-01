@@ -83,7 +83,7 @@ This application consists of five total R scripts.
     - Deploys the shiny app to ShinyApps.io
 
 ### Open Items
-- ~~Add a histogram of miles per run~~ Complete
+- ~~Add a histogram of miles per run~~ **Complete**
 - Add a conversion between kilometers & miles
 - Add in average pace or graph or rolling average pace
 - Add in popups with basic run info when you click on a route
