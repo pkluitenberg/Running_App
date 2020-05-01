@@ -42,6 +42,7 @@ ui <- bootstrapPage(
       end = max(spl_df$start_date_local),
     ),
     h2("Total Miles Run"),
-    textOutput("miles")
+    textOutput("miles"),
+    plotOutput("dist_hist", height = 200)
   )
 )

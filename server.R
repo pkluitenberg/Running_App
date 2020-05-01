@@ -56,6 +56,18 @@ server <- function(input, output, session) {
       digits = 0 )
   })
 
+  output$dist_hist <- renderPlot({
+    # If there is no data, don't output the plot
+    if (nrow(filteredData()) == 0)
+      return(NULL)
+
+    hist(conv_unit(filteredData()$distance, from = "m", to = "mi"),
+      main = "Distribution of Distance",
+      xlab = "Length of Run",
+      col = '#ff0000',
+      border = 'white')
+  })
+
   observe({
     leafletProxy("map", data = filteredData()) %>%
       clearShapes() %>% 
