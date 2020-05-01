@@ -35,7 +35,8 @@ spl_df = poly_to_spatial(dt, poly_col = "map.summary_polyline",
 server <- function(input, output, session) {
 
   filteredData <- reactive({
-    subset(spl_df,start_date_local >= input$range[1] & start_date_local <= input$range[2])
+    subset(spl_df,start_date_local >= input$range[1] &
+          start_date_local <= input$range[2])
   })
 
   output$map <- renderLeaflet({
@@ -50,7 +51,10 @@ server <- function(input, output, session) {
   })
 
   output$miles = renderText({
-    conv_unit(sum(filteredData()$distance),from = "m",to = "mi")})
+    round(conv_unit(
+      sum(filteredData()$distance),from = "m",to = "mi"),
+      digits = 0 )
+  })
 
   observe({
     leafletProxy("map", data = filteredData()) %>%

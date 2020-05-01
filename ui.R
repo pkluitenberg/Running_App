@@ -36,7 +36,7 @@ ui <- bootstrapPage(
   absolutePanel(id = "controls", top = 10, left = "auto", right = 10, 
                 bottom = "auto", width = 325, height = "auto", 
                 class = "panel panel-default", draggable = TRUE, 
-                h1("My Run Map"),
+    h1("My Run Map"),
     dateRangeInput("range", "Date of Run", 
       start = min(spl_df$start_date_local), 
       end = max(spl_df$start_date_local),
