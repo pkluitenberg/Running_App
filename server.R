@@ -12,6 +12,7 @@ suppressMessages(suppressWarnings(library(jsonlite)))
 suppressMessages(suppressWarnings(library(data.table)))
 suppressMessages(suppressWarnings(library(sp)))
 suppressMessages(suppressWarnings(library(measurements)))
+suppressMessages(suppressWarnings(library(ggplot2)))
 # End import packages
 
 # bind location variables
@@ -61,18 +62,19 @@ server <- function(input, output, session) {
     if (nrow(filteredData()) == 0)
       return(NULL)
 
-    hist(conv_unit(filteredData()$distance, from = "m", to = "mi"),
-      main = "Distribution of Distance",
-      xlab = "Length of Run",
-      col = '#ff0000',
-      border = 'white')
+    ggplot(as.data.frame(filteredData()), aes(x=conv_unit(distance,from="m",to="mi"))) +
+      geom_histogram(binwidth = 1, fill = "#69b3a2",color = "white") +
+      xlab("Length of Run") +
+      ylab("Frequency") +
+      theme_classic() +
+      scale_x_continuous(breaks = seq(0,max(round(conv_unit(filteredData()$distance,from = "m", to = "mi"))),1))
   })
 
   observe({
     leafletProxy("map", data = filteredData()) %>%
-      clearShapes() %>% 
+      clearShapes() %>%   
       clearPopups() %>% 
       clearMarkers() %>%
-      addPolylines(opacity = 0.4, weight = 3, color = "#ff0000")
+      addPolylines(opacity = 0.4, weight = 3, color = "#69b3a2")
   })
 }

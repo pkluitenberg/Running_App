@@ -43,6 +43,7 @@ ui <- bootstrapPage(
     ),
     h2("Total Miles Run"),
     textOutput("miles"),
+    h3("Distance Distribution"),
     plotOutput("dist_hist", height = 200)
   )
 )
