@@ -17,59 +17,69 @@ suppressMessages(suppressWarnings(library(sp)))
 
 # This function uses the current refresh token to check for a new access token
 
-refresh_access_token(client_id, client_secret, refresh_token, cur_access_token){
+refresh_access_token = function(client_id, client_secret, refresh_token, cur_access_token){
+
+    message("Checking for old access token...")
 
     # set up body for the POST to the authentication API
     auth_specs = list(client_id = client_id, 
-                  client_secret = secret, 
+                  client_secret = client_secret, 
                   grant_type = 'refresh_token',
                   refresh_token = refresh_token)
 
-    # post
+    # post request
     r = POST(url = "https://www.strava.com/api/v3/oauth/token", # Strava authentication endpoint
          body = auth_specs)
+
+    # warn us if our request is bad
+    warn_for_status(r)
 
     # pull out access token from the response
     new_access_token = content(r)$access_token
 
     # only overwrite token info if a new access token came through
     if(new_access_token != cur_access_token){
+        message("Access token is stale. Saving new access token...")
         write_yaml(content(r),paste0(CONFIG_DIR,"tokens.yml"))
+        message("Access token refreshed!")
+    } else {
+        message("Access token is still fresh.")
     }
 
 }
 
+check_new_activity = function(){
 
-
-
+}
 
 
 # this function querys the provided API and returns data in a data.table
-api_to_dt = function(url, token, page_len = 100){
-    # bind variables
-    done <- FALSE
-    data_lst <- list()
-    i <- 1
+api_to_dt = function(access_token, token_type = "Bearer", page_len = 100){
+    
+    # bind local vars
+    done = FALSE
+    page_num = 1
     dt = data.table()
 
-
+    # you can specify how many results come through on a page so we'll loop through to make smaller pulls
     while (!done){
         # make request to strava API
-        request <- GET(
-            url = url,
-            config = token,
-            query = list(per_page = page_len, page = i)
+        r = GET(
+            url = "https://www.strava.com/api/v3/athlete/activities",
+            add_headers(Authorization = paste(token_type, access_token, sep = " ")),
+            content_type("application/json"),
+            query = list(per_page = page_len, page = page_num)
         )
         # append it to the data.table    
         dt <- rbindlist(list(dt,
-            fromJSON(content(request, as = "text"),flatten = TRUE)),
+            fromJSON(content(r, as = "text"),flatten = TRUE)),
             use.names = TRUE
         )
         # stop requesting once we can't fill any more pages
-        if (length(content(request)) < page_len){
-            done <- TRUE
+        if (length(content(r)) < page_len){
+            done = TRUE
         } else {
-            i <- i + 1
+            page_num = page_num + 1
         }  
     }
 

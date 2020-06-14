@@ -1,17 +1,26 @@
-suppressMessages(suppressWarnings(library(httr)))
-suppressMessages(suppressWarnings(library(yaml)))
 
 # read in our auth specs YAML file
 PARENT_DIR  = "~/repos/run_app/"
 CONFIG_DIR  = paste0(PARENT_DIR,"config/")
-CONFIG      = read_yaml(paste0(CONFIG_DIR,"strava_test.yml"))
+
+CLIENT_CONFIG = read_yaml(paste0(CONFIG_DIR,"client_cfg.yml"))
+TOKEN_CONFIG = read_yaml(paste0(CONFIG_DIR,"tokens.yml"))
+
+source(paste0(PARENT_DIR,"source/functions.R"))
+
+refresh_access_token(client_id = CLIENT_CONFIG$client_id,
+                     client_secret = CLIENT_CONFIG$secret,
+                     refresh_token = TOKEN_CONFIG$refresh_token,
+                     cur_access_token = TOKEN_CONFIG$access_token
+)
 
 # set POST request auth specs
 
-auth_specs = list(client_id = CONFIG$client_id, 
-                  client_secret = CONFIG$secret, 
+
+auth_specs = list(client_id = CLIENT_CONFIG$client_id, 
+                  client_secret = CLIENT_CONFIG$secret, 
                   grant_type = 'refresh_token',
-                  refresh_token = CONFIG$refresh_token)
+                  refresh_token = TOKEN_CONFIG$refresh_token)
 # refresh token
 
 r = POST(url = "https://www.strava.com/api/v3/oauth/token",
