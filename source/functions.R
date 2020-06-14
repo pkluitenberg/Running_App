@@ -48,8 +48,35 @@ refresh_access_token = function(client_id, client_secret, refresh_token, cur_acc
 
 }
 
-check_new_activity = function(){
+# this function checks if there are any new runs compared to the data saved locally
+check_new_run = function(athlete_id, cur_run_cnt, access_token, token_type){
 
+    r <- GET(
+                url = paste0("https://www.strava.com/api/v3/athletes/",athlete_id,"/stats"),
+                add_headers(Authorization = paste(token_type, access_token, sep = " ")),
+                content_type("application/json")
+            )
+
+    new_run_cnt = content(r)$all_run_totals$count
+
+    if(cur_run_cnt != new_run_cnt){
+        return TRUE
+    } else {
+        return FALSE
+    }
+}
+
+
+# this function returns the id of the logged in athlete
+get_athlete_id = function(access_token, token_type){
+
+    r <- GET(
+            url = "https://www.strava.com/api/v3/athlete",
+            add_headers(Authorization = paste(token_type, access_token, sep = " ")),
+            content_type("application/json")
+        )
+    
+    return content(r)$id
 }
 
 
