@@ -1,3 +1,4 @@
+config/strava_test.yml
 config/strava.yml
 config/shiny.yml
 rsconnect/
