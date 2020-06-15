@@ -12,36 +12,35 @@ suppressMessages(suppressWarnings(library(jsonlite)))
 suppressMessages(suppressWarnings(library(data.table)))
 suppressMessages(suppressWarnings(library(httr)))
 suppressMessages(suppressWarnings(library(sp)))
+suppressMessages(suppressWarnings(library(lubridate)))
 # end imports
 
 
 # This function uses the current refresh token to check for a new access token
 
-refresh_access_token = function(client_id, client_secret, refresh_token, cur_access_token){
+refresh_access_token = function(client_id, client_secret, refresh_token, cur_access_token, expires_at){
 
-    message("Checking for old access token...")
+    # if the token expires in the next 60 seconds or is past its expiration date, we refresh
+    if((expires_at-60) >= now("UTC")){
+        message("Access token is stale. Requesting new access token...")
+        
+        auth_specs = list(client_id = client_id, 
+                client_secret = client_secret, 
+                grant_type = 'refresh_token',
+                refresh_token = refresh_token)
 
-    # set up body for the POST to the authentication API
-    auth_specs = list(client_id = client_id, 
-                  client_secret = client_secret, 
-                  grant_type = 'refresh_token',
-                  refresh_token = refresh_token)
+        # post request
+        r = POST(url = "https://www.strava.com/api/v3/oauth/token", # Strava authentication endpoint
+            body = auth_specs)
 
-    # post request
-    r = POST(url = "https://www.strava.com/api/v3/oauth/token", # Strava authentication endpoint
-         body = auth_specs)
+        # warn us if our request is bad
+        warn_for_status(r)
 
-    # warn us if our request is bad
-    warn_for_status(r)
-
-    # pull out access token from the response
-    new_access_token = content(r)$access_token
-
-    # only overwrite token info if a new access token came through
-    if(new_access_token != cur_access_token){
-        message("Access token is stale. Saving new access token...")
+        # writing out our authentication info
         write_yaml(content(r),paste0(CONFIG_DIR,"tokens.yml"))
+        
         message("Access token refreshed!")
+
     } else {
         message("Access token is still fresh.")
     }

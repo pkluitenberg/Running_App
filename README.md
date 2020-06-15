@@ -51,6 +51,7 @@ install.packages(c("data.table",
                    "shiny",
                    "leaflet",
                    "measurements",
+                   "lubridate",
                    "rsconnect"))
 ```
 
