@@ -46,3 +46,17 @@ request <- GET(
             content_type("application/json"),
             query = list(per_page = 100, page = 1)
         )
+
+r <- GET(
+            url = "https://www.strava.com/api/v3/athlete",
+            add_headers(Authorization = paste(TOKEN_CONFIG$token_type, TOKEN_CONFIG$access_token, sep = " ")),
+            content_type("application/json")
+        )
+
+id = content(r)$id
+
+r <- GET(
+            url = paste0("https://www.strava.com/api/v3/athletes/",id,"/stats"),
+            add_headers(Authorization = paste(TOKEN_CONFIG$token_type, TOKEN_CONFIG$access_token, sep = " ")),
+            content_type("application/json")
+        )
