@@ -1,0 +1,3 @@
+# Personal credentials for the Strava API
+client_id: insert_strava_api_client_name
+secret: insert_strava_api_secret

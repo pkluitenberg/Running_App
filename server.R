@@ -2,7 +2,7 @@
 # Title: server.R                                                                 #
 # Purpose: create server for running shiny app                                    #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-20                                                       #
+# Last Modified: 2020-07-20                                                       #
 ###################################################################################
 
 # Begin import packages

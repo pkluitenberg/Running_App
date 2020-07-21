@@ -19,7 +19,7 @@ PARENT_DIR          = "~/repos/run_app/"
 CONFIG_DIR          = paste0(PARENT_DIR,"config/")
 SOURCE_PATH         = paste0("source/functions.R")
 DATA_PATH           = paste0("data/runs.json.gz")
-CLIENT_CONFIG       = read_yaml(paste0(CONFIG_DIR,"client_cfg.yml"))
+CLIENT_CONFIG       = read_yaml(paste0(CONFIG_DIR,"client.yml"))
 TOKEN_CONFIG        = read_yaml(paste0(CONFIG_DIR,"tokens.yml"))
 SHINY_CONFIG        = read_yaml(paste0(CONFIG_DIR,"shiny.yml"))
 

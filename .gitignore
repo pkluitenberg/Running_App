@@ -1,5 +1,6 @@
 config/tokens.yml
-config/client_cfg.yml
+config/client.yml
 config/shiny.yml
 .vscode/
 rsconnect/
+test.R

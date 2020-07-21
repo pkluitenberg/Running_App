@@ -2,7 +2,7 @@
 # Title: functions.R                                                              #
 # Purpose: to declare functions used in this project                              #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-06-13                                                       #  
+# Last Modified: 2020-07-20                                                       #  
 ###################################################################################
 
 # begin imports
