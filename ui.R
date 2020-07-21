@@ -25,6 +25,7 @@ source(SOURCE_PATH)
 
 # read in data
 dt = setDT(fromJSON(DATA_PATH))
+dt = na.omit(dt,cols = c("map.summary_polyline"))
 
 # convert to SpatialLinesDataFrame object
 spl_df = poly_to_spatial(dt, poly_col = "map.summary_polyline",

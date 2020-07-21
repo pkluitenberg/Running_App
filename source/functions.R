@@ -21,7 +21,7 @@ suppressMessages(suppressWarnings(library(lubridate)))
 refresh_access_token = function(client_id, client_secret, refresh_token, cur_access_token, expires_at){
 
     # if the token expires in the next 60 seconds or is past its expiration date, we refresh
-    if((expires_at-60) >= now("UTC")){
+    if((expires_at-60) < now("UTC")){
         message("Access token is stale. Requesting new access token...")
         
         auth_specs = list(client_id = client_id, 
@@ -57,30 +57,29 @@ check_new_run = function(athlete_id, cur_run_cnt, access_token, token_type){
             )
 
     new_run_cnt = content(r)$all_run_totals$count
+    
+    message("New Run Count: ",new_run_cnt)
 
-    if(cur_run_cnt != new_run_cnt){
-        return TRUE
-    } else {
-        return FALSE
-    }
+    return(cur_run_cnt != new_run_cnt)
 }
 
 
 # this function returns the id of the logged in athlete
 get_athlete_id = function(access_token, token_type){
 
-    r <- GET(
+    r = GET(
             url = "https://www.strava.com/api/v3/athlete",
             add_headers(Authorization = paste(token_type, access_token, sep = " ")),
             content_type("application/json")
         )
-    
-    return content(r)$id
+    warn_for_status(r)
+
+    return(content(r)$id)
 }
 
 
 # this function querys the provided API and returns data in a data.table
-api_to_dt = function(access_token, token_type = "Bearer", page_len = 100){
+api_to_dt = function(access_token, token_type, page_len = 100){
     
     # bind local vars
     done = FALSE
@@ -99,7 +98,7 @@ api_to_dt = function(access_token, token_type = "Bearer", page_len = 100){
         # append it to the data.table    
         dt <- rbindlist(list(dt,
             fromJSON(content(r, as = "text"),flatten = TRUE)),
-            use.names = TRUE
+            use.names = TRUE, fill = TRUE
         )
         # stop requesting once we can't fill any more pages
         if (length(content(r)) < page_len){
