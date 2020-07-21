@@ -52,6 +52,7 @@ install.packages(c("data.table",
                    "leaflet",
                    "measurements",
                    "lubridate",
+                   "ggplot2",
                    "rsconnect"))
 ```
 
