@@ -1,0 +1,7 @@
+# Strava API creds from - https://www.strava.com/settings/api
+# these are refreshed by the code
+token_type: Bearer
+access_token: copy_first_strava_access_token_from_above_link
+expires_at: 1595319832
+expires_in: 21600
+refresh_token: copy_first_strava_refresh_token_from_above_link

@@ -1,5 +1,4 @@
 # Personal credentials for ShinyApps.io
-# Don't you dare touch 'em
-token: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-secret: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-acct_name: yeah_boi_1000
+token: insert_shinyapps_token
+secret: insert_shinyapps_secret
+acct_name: insert_shinyapps_acct_name

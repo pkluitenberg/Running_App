@@ -1,3 +1,6 @@
-config/strava.yml
+config/tokens.yml
+config/client.yml
 config/shiny.yml
+.vscode/
 rsconnect/
+test.R

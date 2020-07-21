@@ -2,7 +2,7 @@
 # Title: server.R                                                                 #
 # Purpose: create server for running shiny app                                    #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-20                                                       #
+# Last Modified: 2020-07-20                                                       #
 ###################################################################################
 
 # Begin import packages
@@ -26,6 +26,7 @@ source(SOURCE_PATH)
 
 # read in data
 dt = setDT(fromJSON(DATA_PATH))
+dt = na.omit(dt,cols = c("map.summary_polyline"))
 
 # convert to SpatialLinesDataFrame object
 spl_df = poly_to_spatial(dt, poly_col = "map.summary_polyline",

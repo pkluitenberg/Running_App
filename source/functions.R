@@ -2,42 +2,109 @@
 # Title: functions.R                                                              #
 # Purpose: to declare functions used in this project                              #
 # Author: Paul Kluitenberg                                                        #
-# Last Modified: 2020-04-20                                                       #  
+# Last Modified: 2020-07-20                                                       #  
 ###################################################################################
 
+# begin imports
+suppressMessages(suppressWarnings(library(httr)))
+suppressMessages(suppressWarnings(library(yaml)))
+suppressMessages(suppressWarnings(library(jsonlite)))
+suppressMessages(suppressWarnings(library(data.table)))
+suppressMessages(suppressWarnings(library(httr)))
+suppressMessages(suppressWarnings(library(sp)))
+suppressMessages(suppressWarnings(library(lubridate)))
+# end imports
+
+
+# This function uses the current refresh token to check for a new access token
+
+refresh_access_token = function(client_id, client_secret, refresh_token, cur_access_token, expires_at){
+
+    # if the token expires in the next 60 seconds or is past its expiration date, we refresh
+    if((expires_at-60) < now("UTC")){
+        message("Access token is stale. Requesting new access token...")
+        
+        auth_specs = list(client_id = client_id, 
+                client_secret = client_secret, 
+                grant_type = 'refresh_token',
+                refresh_token = refresh_token)
+
+        # post request
+        r = POST(url = "https://www.strava.com/api/v3/oauth/token", # Strava authentication endpoint
+            body = auth_specs)
+
+        # warn us if our request is bad
+        warn_for_status(r)
+
+        # writing out our authentication info
+        write_yaml(content(r),paste0(CONFIG_DIR,"tokens.yml"))
+        
+        message("Access token refreshed!")
+
+    } else {
+        message("Access token is still fresh.")
+    }
+
+}
+
+# this function checks if there are any new runs compared to the data saved locally
+check_new_run = function(athlete_id, cur_run_cnt, access_token, token_type){
+
+    r <- GET(
+                url = paste0("https://www.strava.com/api/v3/athletes/",athlete_id,"/stats"),
+                add_headers(Authorization = paste(token_type, access_token, sep = " ")),
+                content_type("application/json")
+            )
+
+    new_run_cnt = content(r)$all_run_totals$count
+    
+    message("New Run Count: ",new_run_cnt)
+
+    return(cur_run_cnt != new_run_cnt)
+}
+
+
+# this function returns the id of the logged in athlete
+get_athlete_id = function(access_token, token_type){
+
+    r = GET(
+            url = "https://www.strava.com/api/v3/athlete",
+            add_headers(Authorization = paste(token_type, access_token, sep = " ")),
+            content_type("application/json")
+        )
+    warn_for_status(r)
+
+    return(content(r)$id)
+}
+
+
 # this function querys the provided API and returns data in a data.table
-api_to_dt = function(url, token, page_len = 100){
-
-    # begin import packages
-    suppressMessages(suppressWarnings(library(jsonlite)))
-    suppressMessages(suppressWarnings(library(data.table)))
-    suppressMessages(suppressWarnings(library(httr)))
-    # end import packages
-
-    # bind variables
-    done <- FALSE
-    data_lst <- list()
-    i <- 1
+api_to_dt = function(access_token, token_type, page_len = 100){
+    
+    # bind local vars
+    done = FALSE
+    page_num = 1
     dt = data.table()
 
-
+    # you can specify how many results come through on a page so we'll loop through to make smaller pulls
     while (!done){
         # make request to strava API
-        request <- GET(
-            url = url,
-            config = token,
-            query = list(per_page = page_len, page = i)
+        r = GET(
+            url = "https://www.strava.com/api/v3/athlete/activities",
+            add_headers(Authorization = paste(token_type, access_token, sep = " ")),
+            content_type("application/json"),
+            query = list(per_page = page_len, page = page_num)
         )
         # append it to the data.table    
         dt <- rbindlist(list(dt,
-            fromJSON(content(request, as = "text"),flatten = TRUE)),
-            use.names = TRUE
+            fromJSON(content(r, as = "text"),flatten = TRUE)),
+            use.names = TRUE, fill = TRUE
         )
         # stop requesting once we can't fill any more pages
-        if (length(content(request)) < page_len){
-            done <- TRUE
+        if (length(content(r)) < page_len){
+            done = TRUE
         } else {
-            i <- i + 1
+            page_num = page_num + 1
         }  
     }
 
@@ -49,11 +116,6 @@ api_to_dt = function(url, token, page_len = 100){
 # input is a data.table. I think it should also work with a data.frame
 poly_to_spatial = function(dt, poly_col, decode_poly = FALSE){
     
-    # begin import packages
-    suppressMessages(suppressWarnings(library(sp)))
-    suppressMessages(suppressWarnings(library(data.table)))
-    # end import packages
-
     # define temporary column name for poyline because data.table is
     # really terrible with variables as column names
     setnames(dt,poly_col,"temp_polyline")
