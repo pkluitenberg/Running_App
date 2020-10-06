@@ -18,7 +18,8 @@ suppressMessages(suppressWarnings(library(rsconnect)))
 PARENT_DIR          = "~/repos/run_app/"
 CONFIG_DIR          = paste0(PARENT_DIR,"config/")
 SOURCE_PATH         = paste0("source/functions.R")
-DATA_PATH           = paste0("data/runs.json.gz")
+DATA_PATH           = paste0("data/runs.json")
+DATA_PATH_GZIP      = paste0("data/runs.json.gz")
 CLIENT_CONFIG       = read_yaml(paste0(CONFIG_DIR,"client.yml"))
 TOKEN_CONFIG        = read_yaml(paste0(CONFIG_DIR,"tokens.yml"))
 SHINY_CONFIG        = read_yaml(paste0(CONFIG_DIR,"shiny.yml"))
@@ -38,12 +39,12 @@ shiny_secret        = SHINY_CONFIG$secret
 shiny_acct_name     = SHINY_CONFIG$acct_name
 
 # load current data into memory and get run count
-dt = setDT(fromJSON(DATA_PATH))
+dt = setDT(fromJSON(DATA_PATH_GZIP))
 cur_run_cnt = dt[,.N]
 
 # check if we have a stale token and refresh it if need be
 refresh_access_token(client_id = client_id,
-                        client_secret = secret,
+                        client_secret = client_secret,
                         refresh_token = refresh_token,
                         cur_access_token = access_token,
                         expires_at = expires_at)
@@ -64,10 +65,10 @@ if(new_run){
 
     # filter down to just runs
     dt1 = dt1[type == "Run"]
-
+    
     # write it out
     write_json(dt1, path = DATA_PATH, simplify_vector = TRUE, pretty = TRUE)
-    gzip(DATA_PATH, destname = DATA_PATH, overwrite = TRUE, remove = TRUE)
+    gzip(DATA_PATH, destname = DATA_PATH_GZIP, overwrite = TRUE, remove = TRUE)
 
 }
 
